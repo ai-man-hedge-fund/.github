@@ -1,18 +1,24 @@
-## Hi there 👋
+## ai-man-hedge-fund
 
+Core service map:
 
-| extractor | url |
-| --- |--- |
-| kakao_securities_extractor | https://github.com/ai-man-hedge-fund/kakao_securities_extractor | 
+```mermaid
+flowchart LR
+    iris[iris\nAPI + domain logic + batch control plane]
+    batch[iris-batch\nworker + scheduler + standalone batch runtime]
+    ai[iris-ai-service\nAI gateway + model orchestration]
 
+    batch -->|/api/v1/batch/runtime/*| iris
+    iris -->|AI task requests| ai
+    batch -. shared contracts .-> iris
+```
 
-<!--
+### Repositories
+- `iris`: main product/backend/frontend repository
+- `iris-batch`: standalone batch worker and scheduler runtime
+- `iris-ai-service`: isolated AI service for model/gateway execution
 
-**Here are some ideas to get you started:**
-
-🙋‍♀️ A short introduction - what is your organization all about?
-🌈 Contribution guidelines - how can the community get involved?
-👩‍💻 Useful resources - where can the community find your docs? Is there anything else the community should know?
-🍿 Fun facts - what does your team eat for breakfast?
-🧙 Remember, you can do mighty things with the power of [Markdown](https://docs.github.com/github/writing-on-github/getting-started-with-writing-and-formatting-on-github/basic-writing-and-formatting-syntax)
--->
+### Current architecture intent
+- `iris` owns business logic and API contracts
+- `iris-batch` scales independently for async/batch execution
+- `iris-ai-service` isolates model/provider integration from product services
